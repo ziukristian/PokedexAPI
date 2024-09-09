@@ -1,0 +1,43 @@
+name: .NET Build, Test, and Docker Publish
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'  # Specify the .NET version you're using
+
+    - name: Restore dependencies
+      run: dotnet restore TestApp/TestApp.csproj
+
+    - name: Build
+      run: dotnet build PokedexAPI/PokedexAPI.csproj --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test PokedexAPI.Tests/PokedexAPI.Tests.csproj
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+    - name: Build Docker image
+      run: docker build -t ziukristian/pokedexapi:latest .
+
+    - name: Push Docker image
+      run: docker push ziukristian/pokedexapi:latest
