@@ -18,11 +18,6 @@ namespace PokedexAPI.Services
             };
         }
 
-        public string GetLanguageByPokemon(Pokemon pokemon)
-        {
-            return pokemon.IsLegendary || pokemon.Habitat == "cave" ? "yoda" : "shakespeare";
-        }
-
         public async Task<string> Translate(string text, string language)
         {
             try
@@ -49,6 +44,11 @@ namespace PokedexAPI.Services
             {
                 return text;
             }
+        }
+
+        public string GetLanguageByPokemon(Pokemon pokemon)
+        {
+            return pokemon.IsLegendary || pokemon.Habitat == "cave" ? "yoda" : "shakespeare";
         }
     }
 }

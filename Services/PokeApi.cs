@@ -42,7 +42,7 @@ namespace PokedexAPI.Services
             }
         }
 
-        private static Pokemon MapResponseToPokemon(JsonNode jsonObject)
+        public static Pokemon MapResponseToPokemon(JsonNode jsonObject)
         {
 
             if(jsonObject == null)
@@ -63,8 +63,13 @@ namespace PokedexAPI.Services
             };
         }
 
-        private static string GetFlavorTextByLanguageCode(JsonNode jsonObject, string languageCode = "en")
+        public static string GetFlavorTextByLanguageCode(JsonNode jsonObject, string languageCode = "en")
         {
+            if (jsonObject == null)
+            {
+                throw new Exception("Response object cannot be mapped because NULL");
+            }
+
             var entries = jsonObject["flavor_text_entries"]?.AsArray();
 
             if (entries == null)
@@ -72,14 +77,14 @@ namespace PokedexAPI.Services
                 throw new Exception("Pokemon description collection not found in response object");
             }
 
-            var englishEntry = entries.FirstOrDefault(entry => entry?["language"]?["name"]?.ToString() == languageCode);
+            var requiredEntry = entries.FirstOrDefault(entry => entry?["language"]?["name"]?.ToString() == languageCode);
 
-            if (englishEntry == null)
+            if (requiredEntry == null)
             {
                 throw new Exception($"Description with language code '{languageCode}' not found in response object");
             }
 
-            var description = englishEntry["flavor_text"]?.ToString();
+            var description = requiredEntry["flavor_text"]?.ToString();
 
             if (description == null)
             {
