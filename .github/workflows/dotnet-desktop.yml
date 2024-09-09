@@ -22,7 +22,7 @@ jobs:
         dotnet-version: '8.x'  # Specify the .NET version you're using
 
     - name: Restore dependencies
-      run: dotnet restore TestApp/TestApp.csproj
+      run: dotnet restore PokedexAPI/PokedexAPI.csproj
 
     - name: Build
       run: dotnet build PokedexAPI/PokedexAPI.csproj --configuration Release --no-restore
