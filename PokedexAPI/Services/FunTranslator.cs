@@ -42,12 +42,14 @@ namespace PokedexAPI.Services
             }
             catch
             {
+                // If the translation fails (for any reason!) , return the original text
                 return text;
             }
         }
 
         public string GetLanguageByPokemon(Pokemon pokemon)
         {
+            // If the pokemon is legendary or lives in a cave, return Yoda translator. If not it's Shakespeare
             return pokemon.IsLegendary || pokemon.Habitat == "cave" ? "yoda" : "shakespeare";
         }
     }

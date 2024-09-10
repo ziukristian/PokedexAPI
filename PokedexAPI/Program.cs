@@ -9,19 +9,16 @@ using System.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add services
+// Add custom services
 builder.Services.AddSingleton<IPokeInfoService, PokeApi>();
 builder.Services.AddSingleton<ITranslatorService, FunTranslator>();
 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,6 +27,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+// ROUTES
+
+// GET /pokemon/{pokemonName}
 app.MapGet("/pokemon/{pokemonName}", async (IPokeInfoService pokeInfoService, string pokemonName) =>
 {
     try
@@ -46,6 +47,8 @@ app.MapGet("/pokemon/{pokemonName}", async (IPokeInfoService pokeInfoService, st
 })
 .WithOpenApi();
 
+
+// GET /pokemon/translated/{pokemonName}
 app.MapGet("/pokemon/translated/{pokemonName}", async (IPokeInfoService pokeInfoService, ITranslatorService translator, string pokemonName) =>
 {
     try

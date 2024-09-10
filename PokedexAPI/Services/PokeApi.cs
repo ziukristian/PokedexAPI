@@ -26,8 +26,10 @@ namespace PokedexAPI.Services
 
                 JsonNode jsonObject = JsonNode.Parse(responseBody);
 
+                // Map response to Pokemon object
                 Pokemon pokemon = MapResponseToPokemon(jsonObject);
 
+                // Get description of the pokemon (english is default)
                 pokemon.Description = GetFlavorTextByLanguageCode(jsonObject);
 
                 return pokemon;
@@ -44,7 +46,7 @@ namespace PokedexAPI.Services
 
         public static Pokemon MapResponseToPokemon(JsonNode jsonObject)
         {
-
+            // Check if Json is valid
             if(jsonObject == null)
             {
                 throw new Exception("Response object cannot be mapped because NULL");
@@ -65,6 +67,9 @@ namespace PokedexAPI.Services
 
         public static string GetFlavorTextByLanguageCode(JsonNode jsonObject, string languageCode = "en")
         {
+
+            // Check if Json is valid for the whole path
+
             if (jsonObject == null)
             {
                 throw new Exception("Response object cannot be mapped because NULL");
